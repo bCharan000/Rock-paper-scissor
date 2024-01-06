@@ -1,71 +1,66 @@
-*{
-    padding: 0;
-    margin: 0;
-    text-align:center ;
+let userScore =0;
+let compScore =0;
+
+const choices = document.querySelectorAll(".choise");
+const display = document.querySelector("#display");
+
+const userScoreValue = document.querySelector('#yourScore');
+const compScoreValue = document.querySelector('#cmpScore');
+
+
+//for generating random value
+
+const gencompChoise =() =>{
+  const options = ['rock','paper','sczr'];
+  const randomOptions = Math.floor(Math.random()*3);
+  return options[randomOptions];
+};
+
+//for draw condition
+
+const drawGame = () =>{
+  display.innerText = "The Game was Draw 'No score' ";
+  display.style.backgroundColor = '#D35400';
+};
+
+// display
+
+const winner =(youWin,compWin) =>{
+  if (youWin){
+    userScore++
+    userScoreValue.innerText=userScore;
+    display.innerText = `You Win`;
+    display.style.backgroundColor = '#00FF00';
+  }else{
+    compScore++
+    compScoreValue.innerText = compScore;
+    display.innerText ='You lost';
+    display.style.backgroundColor ="#FF0000";
+  }
 }
 
-#heading{
-    background-color: rgb(40, 55, 71);
-    color: rgb(243, 245, 245);
-    height: 5rem;
-    text-align: center;
-     line-height: 5rem; /*to get the text center height wise */
-}
-#options{
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 4rem;
-    
+const playGame =(youChoice) => {
+  const compChoice =gencompChoise();
 
-.choise{
-    height: 172px;
-    width: 172px;
-    border-radius: 50%;
-    justify-items: center;
-    align-items: center;
-}
+  if (youChoice===compChoice) {
+    drawGame();
+  }else{
+    let youWin =true;
+    if (youChoice==='rock') {
+      //paper sczor
+      youWin= compChoice=== 'paper' ? false :true ;
+    }else if(youChoice==='paper') {
+      youWin=compChoice==='sczr' ? false : true;
+    }else {
+      youWin=compChoice==='rock' ? false :true;
+    }
+      winner(youWin,youChoice,compChoice);
+  }
+};
 
-}
-.choise:hover{
-background-color: rgb(100, 167, 239);
-opacity: .8;
-cursor: pointer;
-
-}
-
-img{
-    height: 170px;
-    width: 170px;
-    border-radius: 50%;
-    object-fit: cover;/*to get a better img*/
-   
-}
-#score{
-    display: flex;
-    justify-content: center;
-    margin-top: 5rem;
-    gap: 2rem;
-
-}
-.score{
-    font-size: 4rem;
-    font-weight: bolder;
-    
-}
-p{
-    margin-top: 1rem;
-    font-size: 2rem;
-
-}
-h3{
-    height: 2rem;
-    line-height: 2rem;
-    display: inline-block;
-    margin-top: 2rem;
-    background-color: green;
-    color: white;
-    padding: 1rem;
-    border-radius: 2rem;
-}
-
+choices.forEach((choice) => {
+  choice.addEventListener("click", () => {
+    const youChoice = choice.getAttribute("id");
+    playGame(youChoice);
+  });
+});
